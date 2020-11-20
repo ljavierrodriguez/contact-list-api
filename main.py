@@ -56,7 +56,25 @@ def contact(contact_id):
     if request.method == 'GET':
         pass
     if request.method == 'PUT':
-        pass
+        full_name = request.json.get("full_name", None)
+        email = request.json.get("email", None)
+        agenda_slug = request.json.get("agenda_slug", None)
+        address = request.json.get("address", "")
+        phone = request.json.get("phone", "")
+
+        if not full_name:
+            return jsonify({"msg": "full_name is required"}), 400
+
+        contact = Contact.query.get(contact_id)
+        contact.full_name = full_name
+        contact.email = email
+        contact.agenda_slug = agenda_slug
+        contact.address = address
+        contact.phone = phone
+
+        contact.update()
+
+        return jsonify(contact.serialize()), 201
     if request.method == 'DELETE':
         pass
 
